@@ -15,6 +15,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define TIMES 1000000
 /*
@@ -23,25 +24,25 @@
  *
  *
  */
-int get_next(char *p, int *next)
+int get_next(char *p, char *next)
 {
 	if (NULL == p || NULL == next){
 		return -1;
 	}
 	int tmp;
 	int index;
-	index = 0;
-	tmp = next[0] = -1;
-	while (p[index+1] != '\0'){
-		if (tmp == -1 || p[index] == p[tmp]){
+	index = 1; // because we always set next[0] as zero
+	tmp = next[0] = 0;
+	while (p[index] != '\0'){
+		if (p[index] == p[tmp]){
 			tmp++;
-			index++;
-			next[index] = tmp;
 		}else{ // not match,next time just give the value zero
-			tmp = -1;
+			tmp = 0;
 		}
+		next[index] = tmp;
+		index++;
 	}
-	return -1;
+	return 0;//success
 }
 /*
  * s : source string
@@ -50,27 +51,34 @@ int get_next(char *p, int *next)
  */
 int kmp_match(char *s,char *p)
 {
-    int next[100];
-    int i , j;
-	size_t s_len;
+	char *next = NULL;
 	size_t p_len;
-    i = 0;
-    j = 0;
-    get_next(p, next);
-//	s_len = strlen(s);
-//	p_len = strlen(p);
-    while(s[i]!='\0'){
-        if(j == -1 || s[i] == p[j]){
-            i++;
-            j++;
-        }else{
-            j = next[j];       //消除了指针i的回溯
-        }
-        if(j == 18){
-            return (i - j);// offset of *p in *s;great than zero means have found *p
+	int s_index;
+	int p_index;
+	p_len = strlen(p);
+	s_index = p_index = 0;
+	if (NULL == (next=malloc(p_len))){
+		return -1;
+	} 
+	if (0 != get_next(p, next)){
+		return -1;
+	}
+	while (s[s_index] != '\0'){
+		if (s[s_index] == p[p_index]){
+			s_index++;
+			p_index++;
+			if (p_index == p_len){
+				return (s_index - p_index);
+			}
+		}else{
+			if (p_index == 0){
+				s_index++;
+				continue;
+			}
+			p_index = next[p_index]; // while s_index never retreat
 		}
-    }
-    return -1;	// not found *p
+	}
+	return -1;
 }
 /*
  *
@@ -83,7 +91,7 @@ int match(char *s,char *p)
 	int s_index;
 	int p_index;
 	index = s_index = p_index = 0;
-	while (s[index] != '\0'){
+	while (s[s_index] != '\0'){
 		while(p[p_index] != '\0'){
 			if (s[s_index] == p[p_index]){
 				s_index++;
@@ -101,24 +109,41 @@ int match(char *s,char *p)
 	}
 	return -1;
 }
+void strstr_match(char *s, char *p)
+{
+	if (NULL == strstr(s,p)){
+		printf("strstr not found\n");
+	}
+}
+int waste_time(void)
+{
+	int a;
+	a++;
+	return a;
+}
 int main(int argc,char **argv)
 {
 	int tick=0;
+	//char *source="abgabdfggdjsksjdhfklg";
 	char *patten="abdfggdjsksjdhfklg";
+	//char *source="edebcd";
+	//char *patten="abcd";
 	//char *patten_test="abcabcda";
 	char *patten_test="abacabdaba";
-	char *source2="zzzzzzzzz";
+	//char *source2="zzzzzzzzz";
 	int next1[30]={0xff};
 	int next2[30]={0xff};
 	char *source="dfgdfdfkj;dkfjasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahsduchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqabdfggdjsksjdhfklg";
 	#if 1
 	for(tick=0; tick<TIMES; tick++){
 	//for(tick=0; tick<1; tick++){
-		//printf("kmp_match %d\n",kmp_match(source,patten));
-		//printf("match %d\n",match(source,patten));
+	//	printf("kmp_match %d\n",kmp_match(source,patten));
+	//	printf("match %d\n",match(source,patten));
 		
 		kmp_match(source,patten);
 		match(source,patten);
+		strstr_match(source,patten);
+		waste_time();
 	}
 	/*
 	if (kmp_match(source,patten) >0 ){
