@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define TIMES 1000000
+typedef unsigned char uchar;
 /*
  * next : next 
  * p	: patten string
@@ -31,6 +32,8 @@ int get_next(char *p, char *next)
 	}
 	int tmp;
 	int index;
+	uchar aa;
+	aa=1;
 	index = 1; // because we always set next[0] as zero
 	tmp = next[0] = 0;
 	while (p[index] != '\0'){
@@ -118,56 +121,24 @@ void strstr_match(char *s, char *p)
 int waste_time(void)
 {
 	int a;
+	int tick;
+	for (tick=0; tick<10; tick++){
+		a++;
+	}
 	a++;
 	return a;
 }
 int main(int argc,char **argv)
 {
 	int tick=0;
-	//char *source="abgabdfggdjsksjdhfklg";
 	char *patten="abdfggdjsksjdhfklg";
-	//char *source="edebcd";
-	//char *patten="abcd";
-	//char *patten_test="abcabcda";
-	char *patten_test="abacabdaba";
-	//char *source2="zzzzzzzzz";
-	int next1[30]={0xff};
-	int next2[30]={0xff};
 	char *source="dfgdfdfkj;dkfjasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahsduchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqabdfggdjsksjdhfklg";
-	#if 1
 	for(tick=0; tick<TIMES; tick++){
 	//for(tick=0; tick<1; tick++){
-	//	printf("kmp_match %d\n",kmp_match(source,patten));
-	//	printf("match %d\n",match(source,patten));
-		
 		kmp_match(source,patten);
 		match(source,patten);
 		strstr_match(source,patten);
 		waste_time();
 	}
-	/*
-	if (kmp_match(source,patten) >0 ){
-		printf("kmp found str\n");
-	}else{
-		printf("kmp not found str\n");
-	}*/
-	#endif
-	#if 0
-	for(tick=0; tick<TIMES; tick++){
-		strstr(source,patten);
-	}
-	if (NULL != strstr(source,patten)){
-		printf("strstr found str\n");
-	}else{
-		printf("strstr not found str\n");
-	}
-	#endif
-
-
-
-
-
-
-
 	return 0;
 }
