@@ -25,7 +25,7 @@ typedef unsigned char uchar;
  *
  *
  */
-int get_next(char *p, char *next)
+int get_next(const char *p, char *next)
 {
 	if (NULL == p || NULL == next){
 		return -1;
@@ -52,12 +52,12 @@ int get_next(char *p, char *next)
  * p : patten string
  *
  */
-int kmp_match(char *s,char *p)
+int kmp_match(const char *s,const char *p)
 {
 	char *next = NULL;
 	size_t p_len;
-	int s_index;
-	int p_index;
+	size_t s_index;
+	size_t p_index;
 	p_len = strlen(p);
 	s_index = p_index = 0;
 	if (NULL == (next=malloc(p_len))){
@@ -68,6 +68,9 @@ int kmp_match(char *s,char *p)
 		return -1;
 	}
 	while (s[s_index] != '\0'){
+		printf("%s\n",p+p_index);
+		printf("%s\n",s+s_index);
+		printf("-----------------\n");
 		if (s[s_index] == p[p_index]){
 			s_index++;
 			p_index++;
@@ -76,11 +79,14 @@ int kmp_match(char *s,char *p)
 				return (s_index - p_index);
 			}
 		}else{
-			if (p_index == 0){
+			if (0 == p_index){
 				s_index++;
 				continue;
 			}
-			p_index = next[p_index]; // while s_index never retreat
+			p_index = next[p_index-1]; // while s_index never retreat
+			if (0 == p_index){
+				s_index++;
+			}
 		}
 	}
 	free(next);
@@ -136,6 +142,16 @@ int main(int argc,char **argv)
 	int tick=0;
 	char *patten="abdfggdjsksjdhfklg";
 	char *source="dfgdfdfkj;dkfjasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahsduchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqasduahsdasjndasuah;akjshjhasahd;asjhas;jdhwihejka;sh;ajkhwe89u1ij;akdjjssssssssssssssssssssssssssncdjhurhfvs;djh;ajkshd;asjhsahsja;sh;asjha;sjha;djahs    duchhhhhhhujkdha;dha;sjhidhqwkdha;sjnha;xn;h;udcha;h;j;sdcf;sjd;hahoihadwqabdfggdjsksjdhfklg";
+	char nex[20]={0};	
+	int i;
+	get_next("abcabd", nex);
+	for (i=0; i<10; i++){
+		printf("%u ",nex[i]);
+	}
+	printf("\n");
+
+	kmp_match("abcabcabddbef","abcabd");
+	return 0;
 	for(tick=0; tick<TIMES; tick++){
 	//for(tick=0; tick<1; tick++){
 		kmp_match(source,patten);
