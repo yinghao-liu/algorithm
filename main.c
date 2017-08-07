@@ -64,6 +64,7 @@ int kmp_match(char *s,char *p)
 		return -1;
 	} 
 	if (0 != get_next(p, next)){
+		free(next);
 		return -1;
 	}
 	while (s[s_index] != '\0'){
@@ -71,6 +72,7 @@ int kmp_match(char *s,char *p)
 			s_index++;
 			p_index++;
 			if (p_index == p_len){
+				free(next);
 				return (s_index - p_index);
 			}
 		}else{
@@ -81,6 +83,7 @@ int kmp_match(char *s,char *p)
 			p_index = next[p_index]; // while s_index never retreat
 		}
 	}
+	free(next);
 	return -1;
 }
 /*
