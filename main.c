@@ -22,7 +22,9 @@ typedef unsigned char uchar;
 /*
  * next : next 
  * p	: patten string
- *
+ *  
+ * on error, -1 is returned,otherwise 0 is returned and next will be set.
+ * 		  
  *
  */
 int get_next(const char *p, char *next)
@@ -48,35 +50,36 @@ int get_next(const char *p, char *next)
 	return 0;//success
 }
 /*
- * s : source string
- * p : patten string
+ * finds the first occurrence of the substring needle in the string haystack
+ * 
+ * return a pointer to the beginning of the substring, or NULL if the substring is not found 
  *
  */
-int kmp_match(const char *s,const char *p)
+char *kmp_match(const char *haystack,const char *needle)
 {
 	char *next = NULL;
 	size_t p_len;
 	size_t s_index;
 	size_t p_index;
-	p_len = strlen(p);
+	p_len = strlen(needle);
 	s_index = p_index = 0;
 	if (NULL == (next=malloc(p_len))){
-		return -1;
+		return NULL;
 	} 
-	if (0 != get_next(p, next)){
+	if (0 != get_next(needle, next)){
 		free(next);
-		return -1;
+		return NULL;
 	}
-	while (s[s_index] != '\0'){
-		printf("%s\n",p+p_index);
-		printf("%s\n",s+s_index);
+	while (haystack[s_index] != '\0'){
+		printf("%s\n",needle+p_index);
+		printf("%s\n",haystack+s_index);
 		printf("-----------------\n");
-		if (s[s_index] == p[p_index]){
+		if (haystack[s_index] == needle[p_index]){
 			s_index++;
 			p_index++;
-			if (p_index == p_len){
+			if (p_index >= p_len){
 				free(next);
-				return (s_index - p_index);
+				return (char *)(haystack+s_index-p_index);
 			}
 		}else{
 			if (0 == p_index){
@@ -90,10 +93,10 @@ int kmp_match(const char *s,const char *p)
 		}
 	}
 	free(next);
-	return -1;
+	return NULL;
 }
 /*
- *
+ * normal match
  *
  *
  */
@@ -151,6 +154,7 @@ int main(int argc,char **argv)
 	printf("\n");
 
 	kmp_match("abcabcabddbef","abcabd");
+	//printf("%s\n",kmp_match("abcabcabddbef","abcabd"));
 	return 0;
 	for(tick=0; tick<TIMES; tick++){
 	//for(tick=0; tick<1; tick++){
