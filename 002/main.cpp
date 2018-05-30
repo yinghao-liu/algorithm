@@ -25,10 +25,10 @@ using namespace name_ring_buffer;
 void *pth_read(void *buff)
 {
 	static long a=0;
-	int res;
+	int res[100];
 	while (a < 100){
-		if (0 == ((ring_buffer<int> *)buff)->read(&res)){
-			printf("read from ring_buffer %u\n", res);
+		if (0 == ((ring_buffer<int[100]> *)buff)->read(&res)){
+			printf("read from ring_buffer %u\n", res[20]);
 			usleep(2);// let pth_write work
 			a++;
 		}else{
@@ -39,15 +39,15 @@ void *pth_read(void *buff)
 }
 void *pth_write(void *buff)
 {
-	static int i=0;
-	while (i < 100){
-		if (0 != ((ring_buffer<int> *)buff)->write(&i)){
+	static int i[100]={0};
+	while (i[20] < 100){
+		if (0 != ((ring_buffer<int[100]> *)buff)->write(&i)){
 			//printf("ring buffer is full\n");
 			//sleep(3);
 		}else{
-			printf("write data to ring buffer %u\n",i);
+			printf("write data to ring buffer %u\n",i[20]);
 			usleep(3);// let pth_read work
-			i++;
+			i[20]++;
 		}
 	}	
 }
@@ -55,11 +55,13 @@ int main(void)
 {
 	pthread_t read_t;
 	pthread_t write_t;
+	
+	
+	auto data = new ring_buffer<int[100]>;
+	data->init(10);
 
-	ring_buffer<int> data;
-	data.init(10);
-	pthread_create(&read_t, NULL, pth_read, &data);
-	pthread_create(&write_t, NULL, pth_write, &data);
+	pthread_create(&read_t, NULL, pth_read, data);
+	pthread_create(&write_t, NULL, pth_write, data);
 
 	pthread_join(read_t, NULL);
 	pthread_join(write_t, NULL);

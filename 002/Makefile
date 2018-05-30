@@ -1,7 +1,9 @@
-CXXFLAGS=-lpthread
-main:main.cpp
+CXXFLAGS=-std=c++11
+LDLIBS=-lpthread
+CC=g++
+main:main.o
 
 clean:
-	rm -rf main
+	rm -rf main *.o
 
 .PHONY:clean
