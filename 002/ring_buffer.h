@@ -33,6 +33,7 @@ public:
 	int write(const T *write_buff);
 	void clear(void);
 	void destroy(void);
+	~ring_buffer(void);
 
 private:
 	size_t nmemb;
@@ -91,6 +92,11 @@ void ring_buffer<T>::destroy(void)
 	if (NULL != buffer){
 		free(buffer);
 	}
+}
+template <typename T>
+ring_buffer<T>::~ring_buffer(void)
+{
+	destroy();
 }
 }/*namespace ring_buffer*/
 #endif /*_RING_BUFFER_*/

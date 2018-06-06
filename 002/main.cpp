@@ -21,13 +21,16 @@
 
 using namespace std;
 using namespace name_ring_buffer;
+typedef int (*P_RB_TYPE)[100];
 
 void *pth_read(void *buff)
 {
 	static long a=0;
-	int res[100];
+	//int res[100];
+	int *res;
+	res = (int *)calloc(sizeof (int), 100);
 	while (a < 100){
-		if (0 == ((ring_buffer<int[100]> *)buff)->read(&res)){
+		if (0 == ((ring_buffer<int[100]> *)buff)->read((P_RB_TYPE)res)){
 			printf("read from ring_buffer %u\n", res[20]);
 			usleep(2);// let pth_write work
 			a++;
@@ -40,14 +43,17 @@ void *pth_read(void *buff)
 void *pth_write(void *buff)
 {
 	static int i[100]={0};
-	while (i[20] < 100){
-		if (0 != ((ring_buffer<int[100]> *)buff)->write(&i)){
+	static int *aa = NULL;
+	aa = (int *)calloc(sizeof (int), 100);
+	aa[20]=0;
+	while (aa[20] < 100){
+		if (0 != ((ring_buffer<int[100]> *)buff)->write((P_RB_TYPE)aa)){
 			//printf("ring buffer is full\n");
 			//sleep(3);
 		}else{
-			printf("write data to ring buffer %u\n",i[20]);
+			printf("write data to ring buffer %u\n",aa[20]);
 			usleep(3);// let pth_read work
-			i[20]++;
+			aa[20]++;
 		}
 	}	
 }
