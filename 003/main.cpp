@@ -37,7 +37,7 @@ void *pth_read(void *buff)
 			for (int j=0; j<ret; j++){
 				sprintf(str+strlen(str), " %u", res[j]);	
 			}
-			printf("%s\n", str);
+			printf("%s\n", str);// sprintf would append a null ('\0') to str, so there is no need to memset() str after a loop
 
 			usleep(10);// let pth_write work
 			i+=ret;

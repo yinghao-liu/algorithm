@@ -117,9 +117,7 @@ void ring_buffer::clear(void)
 
 void ring_buffer::destroy(void)
 {
-	//if (NULL != buffer){
-		free(buffer);//If buffer is NULL, no operation is performed
-	//}
+	free(buffer);//If buffer is NULL, no operation is performed. refer to man free
 }
 ring_buffer::~ring_buffer(void)
 {
